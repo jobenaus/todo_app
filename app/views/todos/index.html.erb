@@ -1,0 +1,32 @@
+<main class="container">
+  <header class="hero">
+    <h1>Todo List</h1>
+    <p>Small, fast, and Once-ready Rails app.</p>
+  </header>
+
+  <section class="card">
+    <%= form_with model: @todo, class: "todo-form" do |form| %>
+      <%= form.label :title, "New todo", class: "sr-only" %>
+      <%= form.text_field :title, placeholder: "What needs to be done?", autofocus: true, required: true %>
+      <%= form.submit "Add" %>
+    <% end %>
+
+    <% if @todo.errors.any? %>
+      <p class="error"><%= @todo.errors.full_messages.to_sentence %></p>
+    <% end %>
+
+    <ul class="todo-list">
+      <% @todos.each do |todo| %>
+        <li class="todo-item <%= "done" if todo.completed %>">
+          <%= form_with model: todo, class: "toggle-form" do |form| %>
+            <%= form.check_box :completed, checked: todo.completed, onchange: "this.form.submit()" %>
+          <% end %>
+
+          <span><%= todo.title %></span>
+
+          <%= button_to "Delete", todo_path(todo), method: :delete, class: "delete" %>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+</main>
