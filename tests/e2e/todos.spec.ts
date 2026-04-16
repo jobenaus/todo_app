@@ -9,12 +9,22 @@ test("can create, complete, and delete a todo", async ({ page }) => {
 
   await expect(page.getByText(title)).toBeVisible();
 
+  const updatedTitle = `${title} updated`;
   const item = page.locator(".todo-item", { hasText: title });
-  await item.locator('input[type="checkbox"]').check();
-  await expect(item).toHaveClass(/done/);
+  await item.getByRole("link", { name: "Edit" }).click();
+  const editForm = page.locator(".todo-item .edit-form");
+  await editForm.getByRole("textbox").fill(updatedTitle);
+  await editForm.getByRole("button", { name: "Save" }).click();
 
-  await item.getByRole("button", { name: "Delete" }).click();
-  await expect(page.getByText(title)).toHaveCount(0);
+  await expect(page.getByText(updatedTitle)).toBeVisible();
+  await expect(page.getByText(title, { exact: true })).toHaveCount(0);
+
+  const updatedItem = page.locator(".todo-item", { hasText: updatedTitle });
+  await updatedItem.locator('input[type="checkbox"]').check();
+  await expect(updatedItem).toHaveClass(/done/);
+
+  await updatedItem.getByRole("button", { name: "Delete" }).click();
+  await expect(page.getByText(updatedTitle)).toHaveCount(0);
 });
 
 test("health endpoint returns success", async ({ request }) => {

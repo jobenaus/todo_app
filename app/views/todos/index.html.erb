@@ -22,7 +22,21 @@
             <%= form.check_box :completed, checked: todo.completed, onchange: "this.form.submit()" %>
           <% end %>
 
-          <span><%= todo.title %></span>
+          <% if @editing_todo_id == todo.id %>
+            <%= form_with model: todo, class: "edit-form" do |form| %>
+              <%= form.label :title, "Edit todo", class: "sr-only" %>
+              <%= form.text_field :title, required: true, autofocus: true %>
+              <%= form.submit "Save" %>
+            <% end %>
+          <% else %>
+            <span><%= todo.title %></span>
+          <% end %>
+
+          <% if @editing_todo_id == todo.id %>
+            <%= link_to "Cancel", root_path, class: "edit" %>
+          <% else %>
+            <%= link_to "Edit", root_path(edit: todo.id), class: "edit" %>
+          <% end %>
 
           <%= button_to "Delete", todo_path(todo), method: :delete, class: "delete" %>
         </li>

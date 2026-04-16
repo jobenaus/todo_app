@@ -2,6 +2,7 @@ class TodosController < ApplicationController
   def index
     @todo = Todo.new
     @todos = Todo.order(created_at: :desc)
+    @editing_todo_id = params[:edit].presence&.to_i
   end
 
   def create
@@ -21,7 +22,11 @@ class TodosController < ApplicationController
     if todo.update(todo_update_params)
       redirect_to root_path, notice: "Todo updated."
     else
-      redirect_to root_path, alert: "Could not update todo."
+      @todo = Todo.new
+      @todos = Todo.order(created_at: :desc)
+      @editing_todo_id = todo.id
+      flash.now[:alert] = todo.errors.full_messages.to_sentence.presence || "Could not update todo."
+      render :index, status: :unprocessable_content
     end
   end
 
@@ -37,6 +42,6 @@ class TodosController < ApplicationController
   end
 
   def todo_update_params
-    params.require(:todo).permit(:completed)
+    params.require(:todo).permit(:completed, :title)
   end
 end

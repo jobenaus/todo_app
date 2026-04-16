@@ -92,11 +92,25 @@ input[type="submit"]:hover {
 
 .todo-item {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 0.5rem;
   border-bottom: 1px solid var(--line);
+}
+
+.todo-item span {
+  word-break: break-word;
+}
+
+.edit-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+}
+
+.edit-form input[type="text"] {
+  width: 100%;
 }
 
 .todo-item:last-child {
@@ -111,6 +125,16 @@ input[type="submit"]:hover {
 .delete {
   background: #f4ece2;
   color: #7e2d12;
+}
+
+.edit {
+  color: var(--accent-dark);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.edit:hover {
+  text-decoration: underline;
 }
 
 .delete:hover {
@@ -138,6 +162,14 @@ input[type="submit"]:hover {
 
   .todo-item {
     grid-template-columns: auto 1fr;
+  }
+
+  .todo-item .edit-form {
+    grid-column: 1 / -1;
+  }
+
+  .todo-item .edit {
+    justify-self: end;
   }
 
   .todo-item .button_to {
