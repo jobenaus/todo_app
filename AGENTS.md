@@ -45,7 +45,8 @@
 ## Deployment notes learned
 - There may be multiple Once apps running (`codex.localhost` and `todo.localhost`) with different image names.
 - `codex.localhost` currently tracks `ghcr.io/jobenaus/todo_app:latest` and should be the default update/test target.
-- `todo.localhost` may still point to `ghcr.io/jobenaus/todo-app:latest` (hyphen), so verify target before running `once update`.
+- `todo.localhost` (`todo-app`) is a separate project and must never be updated, redeployed, or otherwise modified from this repo's workflow.
+- Limit deploy/update/test actions for this repo to `codex.localhost` only.
 
 ## Required delivery pipeline
 - Unless explicitly told otherwise, execute work in this order: **build feature -> dockerize -> push to GHCR -> Once update -> Playwright test**.
